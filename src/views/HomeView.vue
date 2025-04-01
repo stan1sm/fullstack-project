@@ -1,13 +1,13 @@
+<script setup lang="ts">
+import HomeComponent from '@/components/HomeComponent.vue';
+</script>
+
 <template>
   <div class="home">
     <h1>Welcome to Marketplace</h1>
-    <p>Your one-stop shop for everything you need.</p>
   </div>
+  <HomeComponent />
 </template>
-
-<script setup lang="ts">
-// Component logic will go here
-</script>
 
 <style scoped>
 .home {
@@ -18,5 +18,23 @@
 h1 {
   color: var(--primary-color);
   margin-bottom: 1rem;
+}
+
+.header {
+  background-color: var(--header-bg-color);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-nav {
+  background-color: aqua;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
 }
 </style> 
