@@ -22,66 +22,66 @@
       Already have an account? <router-link to="/login">Login</router-link>
     </p>
   </template>
-  
+
   <script setup lang="ts">
   import { ref } from 'vue'
   import axios from 'axios'
-  
+
   const name = ref('')
   const email = ref('')
   const password = ref('')
   const confirmPassword = ref('')
   const message = ref('') // Added definition for message
-  
+
   const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
-    alert('Passwords do not match')
-    return
+    alert('Passwords do not match');
+    return;
   }
   try {
     const response = await axios.post('http://localhost:8080/api/marketplace/register', {
-      name: name.value,
+      username: name.value, // Match the backend's expected "username" field
       email: email.value,
       password: password.value,
-    })
-    message.value = response.data.message || 'Registration successful'
-    console.log('Register attempt successful:', response.data)
+    });
+    message.value = response.data || 'Registration successful';
+    console.log('Register attempt successful:', response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMsg = error.response?.data?.message || 'Registration failed. Please try again.'
-      alert(errorMsg)
+      const errorMsg = error.response?.data || 'Registration failed. Please try again.';
+      alert(errorMsg);
     } else {
-      alert('An unexpected error occurred.')
+      alert('An unexpected error occurred.');
     }
   }
-}
+};
   </script>
-  
-  <style scoped>
+
+<style scoped>
   .register-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   label {
     color: var(--primary-color);
     font-weight: bold;
   }
-  
+
   input {
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: var(--border-radius);
     font-size: 1rem;
   }
-  
+
   .submit-btn {
     background-color: var(--secondary-color);
     color: white;
@@ -92,23 +92,23 @@
     cursor: pointer;
     transition: background-color 0.2s;
   }
-  
+
   .submit-btn:hover {
     background-color: #3aa876;
   }
-  
+
   .login-link {
     text-align: center;
     margin-top: 1.5rem;
     color: #666;
   }
-  
+
   .login-link a {
     color: var(--secondary-color);
     text-decoration: none;
   }
-  
+
   .login-link a:hover {
     text-decoration: underline;
   }
-  </style>
+</style>
