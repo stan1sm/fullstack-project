@@ -25,24 +25,36 @@
   
   <script setup lang="ts">
   import { ref } from 'vue'
+  import axios from 'axios'
   
   const name = ref('')
   const email = ref('')
   const password = ref('')
   const confirmPassword = ref('')
+  const message = ref('') // Added definition for message
   
   const handleRegister = async () => {
-    if (password.value !== confirmPassword.value) {
-      alert('Passwords do not match')
-      return
-    }
-    // TODO: Implement registration logic
-    console.log('Register attempt:', {
+  if (password.value !== confirmPassword.value) {
+    alert('Passwords do not match')
+    return
+  }
+  try {
+    const response = await axios.post('http://localhost:8080/api/marketplace/register', {
       name: name.value,
       email: email.value,
-      password: password.value
+      password: password.value,
     })
+    message.value = response.data.message || 'Registration successful'
+    console.log('Register attempt successful:', response.data)
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMsg = error.response?.data?.message || 'Registration failed. Please try again.'
+      alert(errorMsg)
+    } else {
+      alert('An unexpected error occurred.')
+    }
   }
+}
   </script>
   
   <style scoped>
