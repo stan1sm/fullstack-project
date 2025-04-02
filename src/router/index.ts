@@ -34,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Register',
     component: () => import('../views/RegisterView.vue')
   },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/ProfileView.vue'),
+  }
 
 ]
 
@@ -43,4 +48,4 @@ const router = createRouter({
 })
 
 
-export default router 
+export default router

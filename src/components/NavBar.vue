@@ -9,31 +9,40 @@
           <router-link to="/messages">Messages</router-link>
         </div>
         <div class="auth-links">
-          <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-          <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
-          <button v-else @click="logout">Logout</button>
+          <LoggedInNavBar v-if="isLoggedIn" />
+          <LoggedOutNavBar v-else />
         </div>
       </nav>
     </header>
   </template>
-  
+
   <script setup lang="ts">
-  import { computed } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useAuthStore } from '@/stores/auth'
-  
-  const router = useRouter()
-  const authStore = useAuthStore()
-  
-  const appTitle = import.meta.env.VITE_APP_TITLE || 'Marketplace'
-  const isAuthenticated = computed(() => authStore.isAuthenticated)
-  
-  const logout = async () => {
-    await authStore.logout()
-    router.push('/login')
-  }
+  import { computed, onMounted } from 'vue';
+  import { useUserStore } from '@/stores/user';
+  import axios from 'axios';
+  import LoggedInNavBar from './LoggedInNavBar.vue';
+  import LoggedOutNavBar from './LoggedOutNavBar.vue';
+
+  const userStore = useUserStore();
+  const isLoggedIn = computed(() => userStore.isLoggedIn);
+
+  onMounted(async () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const response = await axios.get('http://localhost:8080/api/marketplace/isLoggedIn', {
+          headers: { Authorization: token },
+        });
+        if (response.data) {
+          userStore.login({ name: 'User', email: 'user@example.com' }); // Replace with actual user data if needed
+        }
+      } catch {
+        userStore.logout();
+      }
+    }
+  });
   </script>
-  
+
   <style scoped>
   .header {
     background-color: var(--primary-color);
@@ -41,7 +50,7 @@
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .main-nav {
     max-width: 1200px;
     margin: 0 auto;
@@ -49,12 +58,12 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .nav-links {
     display: flex;
     gap: calc(var(--spacing-unit) * 2);
   }
-  
+
   .nav-links a,
   .auth-links a,
   .auth-links button {
