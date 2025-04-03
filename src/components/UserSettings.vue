@@ -1,139 +1,160 @@
 <template>
-    <div class="user-settings">
-      <h1>User Settings</h1>
-      <form @submit.prevent="updateSettings">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            v-model="name"
-            placeholder="Enter your new name"
-          />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            v-model="email"
-            placeholder="Enter your new email"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">New Password</label>
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            placeholder="Enter your new password"
-          />
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">Confirm New Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            v-model="confirmPassword"
-            placeholder="Confirm your new password"
-          />
-        </div>
-        <button type="submit" class="submit-btn">Save Changes</button>
-      </form>
-    </div>
-  </template>
+  <div class="user-settings">
+    <h1>User Settings</h1>
+    <form @submit.prevent="updateSettings">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          v-model="name"
+          placeholder="Enter your new name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          v-model="email"
+          placeholder="Enter your new email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">New Password</label>
+        <input
+          type="password"
+          id="password"
+          v-model="password"
+          placeholder="Enter your new password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          v-model="confirmPassword"
+          placeholder="Confirm your new password"
+        />
+      </div>
+      <button type="submit" class="submit-btn">Save Changes</button>
+    </form>
+  </div>
+</template>
 
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import axios from 'axios';
+<script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
 
-  const name = ref('');
-  const email = ref('');
-  const password = ref('');
-  const confirmPassword = ref('');
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const API_URL = 'http://localhost:8080/api/marketplace';
 
-  const updateSettings = async () => {
-    if (password.value !== confirmPassword.value) {
-      alert('Passwords do not match');
-      return;
+const updateSettings = async () => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    alert('You are not logged in. Please log in again.');
+    window.location.href = '/login';
+    return;
+  }
+
+  try {
+    // Update name
+    if (name.value) {
+      await axios.put(
+        `${API_URL}/userinfo/name`,
+        { username: name.value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log('Name updated successfully');
     }
 
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        alert('You are not logged in. Please log in again.');
-        window.location.href = '/login';
+    // Update email
+    if (email.value) {
+      await axios.put(
+        `${API_URL}/userinfo/email`,
+        { email: email.value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log('Email updated successfully');
+    }
+
+    // Update password
+    if (password.value) {
+      if (password.value !== confirmPassword.value) {
+        alert('Passwords do not match');
         return;
       }
-
-      const response = await axios.put(
-        'http://localhost:8080/api/marketplace/user/settings',
-        {
-          name: name.value,
-          email: email.value,
-          password: password.value,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      await axios.put(
+        `${API_URL}/userinfo/password`,
+        { password: password.value },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      alert('Settings updated successfully!');
-      console.log('Updated settings:', response.data);
-    } catch (error) {
-      console.error('Failed to update settings:', error);
-      alert('An error occurred while updating your settings. Please try again.');
+      console.log('Password updated successfully');
     }
-  };
-  </script>
 
-  <style scoped>
-  .user-settings {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    alert('Settings updated successfully!');
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Failed to update settings:', error.response?.data || error.message);
+    } else {
+      console.error('Failed to update settings:', error);
+    }
+    alert('An error occurred while updating your settings. Please try again.');
   }
+};
+</script>
 
-  h1 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
+<style scoped>
+.user-settings {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .form-group {
-    margin-bottom: 1rem;
-  }
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
+.form-group {
+  margin-bottom: 1rem;
+}
 
-  input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-  }
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
 
-  .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
 
-  .submit-btn:hover {
-    background-color: #3aa876;
-  }
-  </style>
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #3aa876;
+}
+</style>

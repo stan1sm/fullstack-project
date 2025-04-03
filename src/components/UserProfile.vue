@@ -28,10 +28,10 @@ const fetchUserEmail = async () => {
     });
     userEmail.value = response.data;
   } catch (error) {
-    if (error.response?.status === 403) {
+    if ((error as any).response?.status === 403) {
       console.error('Access forbidden - possible token issue');
     }
-    console.error('Failed to fetch user email:', error);
+    console.error('Failed to fetch user email:', error as any);
     logout();
     localStorage.removeItem('authToken');
     router.push('/login'); // Redirect to login page
@@ -48,7 +48,7 @@ const fetchUserName = async () => {
       userName.value = response.data;
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    if ((error as any).response?.status === 403) {
       console.error('Access forbidden - possible token issue');
     }
     console.error('Failed to fetch user name:', error);
@@ -70,7 +70,7 @@ const logout = async () => {
     alert('You have been logged out.');
     router.push('/login'); // Redirect to login page
   } catch (error) {
-    console.error('Logout failed:', error);
+    console.error('Logout failed:', error as any);
     alert('An error occurred while logging out.');
   }
 };
