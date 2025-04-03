@@ -40,19 +40,15 @@
         password: password.value,
       });
 
-      // Assuming the backend returns user details and a token
       const { user, token } = response.data;
 
-      // Save the user details in the store
       userStore.login(user);
 
-      // Optionally, save the token in localStorage or cookies
       localStorage.setItem('authToken', token);
 
       console.log('Login successful:', user);
-      alert('Login successful!');
-      // Redirect to the user profile or dashboard
-      window.location.href = '/'; // Adjust the route as needed
+      console.log('Stored token:', localStorage.getItem('authToken'));
+      window.location.href = '/';
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMsg = error.response?.data || 'Login failed. Please try again.';

@@ -46,6 +46,7 @@
     });
     message.value = response.data || 'Registration successful';
     console.log('Register attempt successful:', response.data);
+
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMsg = error.response?.data || 'Registration failed. Please try again.';
