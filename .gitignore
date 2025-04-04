@@ -3,6 +3,5 @@ dist
 .DS_Store
 .idea
 .vscode
-.husky
 .env
 .env*
