@@ -43,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/userSettings',
     name: 'UserSettings',
     component: () => import('../views/UserSettingsView.vue'),
+  },
+  {
+    path: '/createItem',
+    name: 'CreateItem',
+    component: () => import('../views/CreateItemView.vue'),
   }
 
 ]
