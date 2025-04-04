@@ -1,7 +1,7 @@
 <template>
     <header class="header">
       <nav class="main-nav">
-        <router-link to="/" class="logo">{{ appTitle }}</router-link>
+        <router-link to="/" class="logo">Marketplace</router-link>
         <div class="nav-links">
           <router-link to="/">Home</router-link>
           <router-link to="/categories">Categories</router-link>

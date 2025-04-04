@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import UserSettings from '@/components/UserSettings.vue';
 </script>
 <template>
