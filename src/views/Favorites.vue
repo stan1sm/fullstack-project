@@ -1,8 +1,8 @@
 <template>
   <div class="favorites">
-    <h1>Your Favorites</h1>
+    <h1>{{ $t('favoritesView.title') }}</h1>
     <div v-if="favorites.length === 0" class="empty-state">
-      <p>You haven't added any items to your favorites yet.</p>
+      <p>{{ $t('favoritesView.emptyState') }}</p>
     </div>
     <div v-else class="favorites-grid">
       <div v-for="item in favorites" :key="item.id" class="favorite-card">

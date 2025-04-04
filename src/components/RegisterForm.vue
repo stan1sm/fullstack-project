@@ -1,61 +1,64 @@
 <template>
     <form @submit.prevent="handleRegister" class="register-form">
       <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" v-model="name" required placeholder="Enter your full name" />
+        <label for="name">{{ $t('registerForm.fullNameLabel') }}</label>
+        <input type="text" id="name" v-model="name" required :placeholder="$t('registerForm.fullNamePlaceholder')" />
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" required placeholder="Enter your email" />
+        <label for="email">{{ $t('registerForm.emailLabel') }}</label>
+        <input type="email" id="email" v-model="email" required :placeholder="$t('registerForm.emailPlaceholder')" />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required placeholder="Create a password" />
+        <label for="password">{{ $t('registerForm.passwordLabel') }}</label>
+        <input type="password" id="password" v-model="password" required :placeholder="$t('registerForm.passwordPlaceholder')" />
       </div>
       <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" required placeholder="Confirm your password" />
+        <label for="confirmPassword">{{ $t('registerForm.confirmPasswordLabel') }}</label>
+        <input type="password" id="confirmPassword" v-model="confirmPassword" required :placeholder="$t('registerForm.confirmPasswordPlaceholder')" />
       </div>
-      <button type="submit" class="submit-btn">Register</button>
+      <button type="submit" class="submit-btn">{{ $t('registerForm.registerButton') }}</button>
     </form>
     <p class="login-link">
-      Already have an account? <router-link to="/login">Login</router-link>
+      {{ $t('registerForm.alreadyHaveAccount') }}<router-link to="/login">{{ $t('navbar.login') }}</router-link>
     </p>
   </template>
 
   <script setup lang="ts">
   import { ref } from 'vue'
   import axios from 'axios'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const name = ref('')
   const email = ref('')
   const password = ref('')
   const confirmPassword = ref('')
-  const message = ref('') // Added definition for message
+  const message = ref('')
 
   const handleRegister = async () => {
-  if (password.value !== confirmPassword.value) {
-    alert('Passwords do not match');
-    return;
-  }
-  try {
-    const response = await axios.post('http://localhost:8080/api/marketplace/register', {
-      username: name.value, // Match the backend's expected "username" field
-      email: email.value,
-      password: password.value,
-    });
-    message.value = response.data || 'Registration successful';
-    console.log('Register attempt successful:', response.data);
+    if (password.value !== confirmPassword.value) {
+      alert(t('registerForm.errorPasswordMismatch'))
+      return
+    }
+    try {
+      const response = await axios.post('http://localhost:8080/api/marketplace/register', {
+        username: name.value,
+        email: email.value,
+        password: password.value,
+      })
+      message.value = response.data || t('registerForm.successMessage')
+      console.log('Register attempt successful:', response.data)
+      alert(message.value)
 
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMsg = error.response?.data || 'Registration failed. Please try again.';
-      alert(errorMsg);
-    } else {
-      alert('An unexpected error occurred.');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMsg = error.response?.data || t('registerForm.errorDefault')
+        alert(errorMsg)
+      } else {
+        alert(t('loginForm.errorUnexpected'))
+      }
     }
   }
-};
   </script>
 
 <style scoped>

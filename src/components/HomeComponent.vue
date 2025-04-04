@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -16,8 +15,8 @@ const handleRedirect = () => {
 
 <template>
   <div class="home">
-    <!-- Button to redirect -->
-    <button class="redirect-btn" @click="handleRedirect">Create Item</button>
+    <!-- Use $t for the button text -->
+    <button class="redirect-btn" @click="handleRedirect">{{ $t('userProfile.createItemButton') }}</button>
   </div>
 </template>
 

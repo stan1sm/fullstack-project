@@ -1,10 +1,10 @@
 <template>
   <div class="login">
     <div class="login-container">
-      <h1>Login</h1>
+      <h1>{{ $t('navbar.login') }}</h1>
       <LoginComponent />
       <p class="register-link">
-        Don't have an account? <router-link to="/register">Register</router-link>
+        {{ $t('loginView.dontHaveAccount') }}<router-link to="/register">{{ $t('navbar.register') }}</router-link>
       </p>
     </div>
   </div>
