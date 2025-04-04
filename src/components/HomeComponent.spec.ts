@@ -1,6 +1,4 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import HomeComponent from './HomeComponent.vue'
+import { describe, it } from 'vitest'
 
 describe('HomeComponent', () => {
     it('renders the main heading', () => {
