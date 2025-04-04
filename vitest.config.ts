@@ -8,7 +8,7 @@ export default mergeConfig(
             globals: true, // Make Vitest globals available (describe, it, expect, etc.)
             environment: 'jsdom', // Use jsdom for DOM simulation
             // Optional: Include setup files if needed
-            // setupFiles: './src/tests/setup.ts',
+            setupFiles: './src/tests/setup.ts',
         },
     })
 ) 
