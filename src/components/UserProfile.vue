@@ -1,10 +1,10 @@
 <template>
   <div class="user-profile">
-    <h1>Welcome, {{ userName }}</h1>
-    <p>Email: {{ userEmail }}</p>
-    <button @click="logout" class="button">Logout</button>
-    <button @click="goToSettings" class="button">Settings</button>
-    <button @click="createItem" class ="button">Create Item</button>
+    <h1>{{ $t('userProfile.welcome', { userName: userName }) }}</h1>
+    <p>{{ $t('userProfile.emailPrefix') }}{{ userEmail }}</p>
+    <button @click="logout" class="button">{{ $t('navbar.logout') }}</button>
+    <button @click="goToSettings" class="button">{{ $t('userProfile.settingsButton') }}</button>
+    <button @click="createItem" class ="button">{{ $t('userProfile.createItemButton') }}</button>
   </div>
 </template>
 
@@ -12,9 +12,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
-const router = useRouter(); // Import and define the router
-
+const { t } = useI18n();
+const router = useRouter();
 const userEmail = ref('');
 const userName = ref('');
 
@@ -22,7 +23,7 @@ const fetchUserEmail = async () => {
   try {
     const token = localStorage.getItem('authToken');
     if (!token) {
-      throw new Error('No token found');
+      throw new Error(t('userProfile.errorNoToken'));
     }
     const response = await axios.get('http://localhost:8080/api/marketplace/userinfo/email', {
       headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +36,7 @@ const fetchUserEmail = async () => {
     console.error('Failed to fetch user email:', error as any);
     logout();
     localStorage.removeItem('authToken');
-    router.push('/login'); // Redirect to login page
+    router.push('/login');
   }
 };
 
@@ -55,7 +56,7 @@ const fetchUserName = async () => {
     console.error('Failed to fetch user name:', error);
     logout();
     localStorage.removeItem('authToken');
-    router.push('/login'); // Redirect to login page
+    router.push('/login');
   }
 };
 
@@ -67,21 +68,21 @@ const logout = async () => {
         headers: { Authorization: `Bearer ${token}` },
       });
     }
-    localStorage.removeItem('authToken'); // Clear token
-    alert('You have been logged out.');
-    router.push('/login'); // Redirect to login page
+    localStorage.removeItem('authToken');
+    alert(t('logout.success'));
+    router.push('/login');
   } catch (error) {
     console.error('Logout failed:', error as any);
-    alert('An error occurred while logging out.');
+    alert(t('logout.error'));
   }
 };
 
 const goToSettings = () => {
-  router.push('/userSettings'); // Navigate to the settings page
+  router.push('/userSettings');
 };
 
 const createItem = () => {
-  router.push('/createItem'); // Navigate to the create item page
+  router.push('/createItem');
 };
 
 onMounted(() => {

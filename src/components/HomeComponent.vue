@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 
 const handleRedirect = () => {
@@ -16,8 +18,8 @@ const handleRedirect = () => {
 
 <template>
   <div class="home">
-    <!-- Button to redirect -->
-    <button class="redirect-btn" @click="handleRedirect">Create Item</button>
+    <!-- Use $t for the button text -->
+    <button class="redirect-btn" @click="handleRedirect">{{ $t('userProfile.createItemButton') }}</button>
   </div>
 </template>
 

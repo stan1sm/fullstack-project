@@ -1,44 +1,44 @@
 <template>
   <div class="user-settings">
-    <h1>User Settings</h1>
+    <h1>{{ $t('userSettings.title') }}</h1>
     <form @submit.prevent="updateSettings">
       <div class="form-group">
-        <label for="name">Name</label>
+        <label for="name">{{ $t('userSettings.nameLabel') }}</label>
         <input
           type="text"
           id="name"
           v-model="name"
-          placeholder="Enter your new name"
+          :placeholder="$t('userSettings.namePlaceholder')"
         />
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">{{ $t('userSettings.emailLabel') }}</label>
         <input
           type="email"
           id="email"
           v-model="email"
-          placeholder="Enter your new email"
+          :placeholder="$t('userSettings.emailPlaceholder')"
         />
       </div>
       <div class="form-group">
-        <label for="password">New Password</label>
+        <label for="password">{{ $t('userSettings.newPasswordLabel') }}</label>
         <input
           type="password"
           id="password"
           v-model="password"
-          placeholder="Enter your new password"
+          :placeholder="$t('userSettings.newPasswordPlaceholder')"
         />
       </div>
       <div class="form-group">
-        <label for="confirmPassword">Confirm New Password</label>
+        <label for="confirmPassword">{{ $t('userSettings.confirmNewPasswordLabel') }}</label>
         <input
           type="password"
           id="confirmPassword"
           v-model="confirmPassword"
-          placeholder="Confirm your new password"
+          :placeholder="$t('userSettings.confirmNewPasswordPlaceholder')"
         />
       </div>
-      <button type="submit" class="submit-btn">Save Changes</button>
+      <button type="submit" class="submit-btn">{{ $t('userSettings.saveButton') }}</button>
     </form>
   </div>
 </template>
@@ -46,7 +46,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const name = ref('');
 const email = ref('');
 const password = ref('');
@@ -56,7 +58,7 @@ const API_URL = 'http://localhost:8080/api/marketplace';
 const updateSettings = async () => {
   const token = localStorage.getItem('authToken');
   if (!token) {
-    alert('You are not logged in. Please log in again.');
+    alert(t('createItemForm.errorNotLoggedIn'));
     window.location.href = '/login';
     return;
   }
@@ -85,7 +87,7 @@ const updateSettings = async () => {
     // Update password
     if (password.value) {
       if (password.value !== confirmPassword.value) {
-        alert('Passwords do not match');
+        alert(t('registerForm.errorPasswordMismatch'));
         return;
       }
       await axios.put(
@@ -96,14 +98,14 @@ const updateSettings = async () => {
       console.log('Password updated successfully');
     }
 
-    alert('Settings updated successfully!');
+    alert(t('userSettings.successMessage'));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Failed to update settings:', error.response?.data || error.message);
     } else {
       console.error('Failed to update settings:', error);
     }
-    alert('An error occurred while updating your settings. Please try again.');
+    alert(t('userSettings.errorDefault'));
   }
 };
 </script>
