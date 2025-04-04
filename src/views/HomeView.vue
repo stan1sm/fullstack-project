@@ -4,7 +4,7 @@ import HomeComponent from '@/components/HomeComponent.vue';
 
 <template>
   <div class="home">
-    <h1>Welcome to Marketplace</h1>
+    <h1>{{ $t('homeView.welcomeTitle') }}</h1>
   </div>
   <HomeComponent />
 </template>

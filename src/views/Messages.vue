@@ -1,8 +1,8 @@
 <template>
   <div class="messages">
-    <h1>Messages</h1>
+    <h1>{{ $t('messagesView.title') }}</h1>
     <div v-if="messages.length === 0" class="empty-state">
-      <p>You don't have any messages yet.</p>
+      <p>{{ $t('messagesView.emptyState') }}</p>
     </div>
     <div v-else class="messages-list">
       <div v-for="message in messages" :key="message.id" class="message-card">

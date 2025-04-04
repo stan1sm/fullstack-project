@@ -1,26 +1,26 @@
 <template>
     <form @submit.prevent="handleLogin" class="login-form">
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">{{ $t('loginForm.emailLabel') }}</label>
         <input
           type="email"
           id="email"
           v-model="email"
           required
-          placeholder="Enter your email"
+          :placeholder="$t('loginForm.emailPlaceholder')"
         />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">{{ $t('loginForm.passwordLabel') }}</label>
         <input
           type="password"
           id="password"
           v-model="password"
           required
-          placeholder="Enter your password"
+          :placeholder="$t('loginForm.passwordPlaceholder')"
         />
       </div>
-      <button type="submit" class="submit-btn">Login</button>
+      <button type="submit" class="submit-btn">{{ $t('loginForm.loginButton') }}</button>
     </form>
   </template>
 
@@ -28,7 +28,9 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import { useUserStore } from '@/stores/user';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const email = ref('');
   const password = ref('');
   const userStore = useUserStore();
@@ -51,10 +53,10 @@
       window.location.href = '/';
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorMsg = error.response?.data || 'Login failed. Please try again.';
+        const errorMsg = error.response?.data || t('loginForm.errorDefault');
         alert(errorMsg);
       } else {
-        alert('An unexpected error occurred.');
+        alert(t('loginForm.errorUnexpected'));
       }
     }
   };

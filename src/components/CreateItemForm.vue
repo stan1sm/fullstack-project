@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const itemName = ref('');
 const itemDescription = ref('');
 const itemPrice = ref(0.0);
@@ -17,10 +19,9 @@ const handleFileChange = (event: Event) => {
 };
 
 const handleSubmit = async () => {
-  //Check if User is logged
   const token = localStorage.getItem('authToken');
   if (!token) {
-    alert('You are not logged in. Please log in again.');
+    alert(t('createItemForm.errorNotLoggedIn'));
     window.location.href = '/login';
     return;
   }
@@ -46,7 +47,7 @@ const handleSubmit = async () => {
       }
     );
 
-    alert('Item created successfully!');
+    alert(t('createItemForm.successMessage'));
     console.log('Created item:', response.data);
 
     // Clear form fields
@@ -54,45 +55,44 @@ const handleSubmit = async () => {
     itemDescription.value = '';
     itemPrice.value = 0;
     itemCategory.value = '';
-    itemImage.value = null;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating item:', error.response?.data || error.message);
-    alert('Failed to create item. Please try again.');
+    alert(t('createItemForm.errorDefault'));
   }
 };
 </script>
 
 <template>
   <div class="create-item-form">
-    <h2>Create New Item</h2>
+    <h2>{{ $t('createItemForm.title') }}</h2>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label for="name">Item Name:</label>
+        <label for="name">{{ $t('createItemForm.nameLabel') }}</label>
         <input type="text" id="name" v-model="itemName" required />
       </div>
       <div class="form-group">
-        <label for="description">Description:</label>
+        <label for="description">{{ $t('createItemForm.descriptionLabel') }}</label>
         <textarea id="description" v-model="itemDescription" required></textarea>
       </div>
       <div class="form-group">
-        <label for="price">Price:</label>
+        <label for="price">{{ $t('createItemForm.priceLabel') }}</label>
         <input type="number" step="0.01" id="price" v-model.number="itemPrice" required />
       </div>
       <div class="form-group">
-        <label for="category">Category:</label>
+        <label for="category">{{ $t('createItemForm.categoryLabel') }}</label>
         <select id="category" v-model="itemCategory" required>
-          <option value="" disabled>Select a category</option>
-          <option value="electronics">Electronics</option>
-          <option value="clothing">Clothing</option>
-          <option value="home">Home</option>
-          <option value="toys">Toys</option>
+          <option value="" disabled>{{ $t('createItemForm.categorySelectDefault') }}</option>
+          <option value="electronics">{{ $t('createItemForm.categoryElectronics') }}</option>
+          <option value="clothing">{{ $t('createItemForm.categoryClothing') }}</option>
+          <option value="home">{{ $t('createItemForm.categoryHome') }}</option>
+          <option value="toys">{{ $t('createItemForm.categoryToys') }}</option>
         </select>
       </div>
       <div class="form-group">
         <label for="image">Upload Image:</label>
         <input type="file" id="image" @change="handleFileChange" accept="image/*" />
       </div>
-      <button class="submit-btn" type="submit">Create Item</button>
+      <button class="submit-btn" type="submit">{{ $t('userProfile.createItemButton') }}</button>
     </form>
   </div>
 </template>

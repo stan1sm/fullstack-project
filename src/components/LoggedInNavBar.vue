@@ -1,14 +1,16 @@
 <template>
     <nav class="navbar">
-      <router-link class="button" to="/profile">My Profile</router-link>
-      <button class="button" @click="logout">Logout</button>
+      <router-link class="button" to="/profile">{{ $t('navbar.myProfile') }}</router-link>
+      <button class="button" @click="logout">{{ $t('navbar.logout') }}</button>
     </nav>
   </template>
 
   <script setup lang="ts">
   import { useUserStore } from '@/stores/user';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const userStore = useUserStore();
 
   const logout = async () => {
@@ -21,10 +23,10 @@ import axios from 'axios';
     }
     userStore.logout();
     localStorage.removeItem('authToken'); // Clear token
-    alert('You have been logged out.');
+    alert(t('logout.success'));
   } catch (error) {
     console.error('Logout failed:', error);
-    alert('An error occurred while logging out.');
+    alert(t('logout.error'));
   }
 };
   </script>
