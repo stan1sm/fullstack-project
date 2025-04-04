@@ -6,30 +6,42 @@ const itemName = ref('');
 const itemDescription = ref('');
 const itemPrice = ref(0.0);
 const itemCategory = ref('');
+const itemImage = ref<File | null>(null);
 const API_URL = 'http://localhost:8080/api/marketplace';
 
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    itemImage.value = target.files[0];
+  }
+};
+
 const handleSubmit = async () => {
-  const token = localStorage.getItem('authToken'); // Retrieve the user's token from localStorage
+  //Check if User is logged
+  const token = localStorage.getItem('authToken');
   if (!token) {
     alert('You are not logged in. Please log in again.');
-    window.location.href = '/login'; // Redirect to login if no token is found
+    window.location.href = '/login';
     return;
   }
 
   try {
-    const item = {
-      name: itemName.value,
-      description: itemDescription.value,
-      price: itemPrice.value,
-      category: itemCategory.value,
-    };
+    const formData = new FormData();
+    formData.append('name', itemName.value);
+    formData.append('description', itemDescription.value);
+    formData.append('price', itemPrice.value.toString());
+    formData.append('category', itemCategory.value);
+    if (itemImage.value) {
+      formData.append('image', itemImage.value);
+    }
 
-    const response = await axios.put(
+    const response = await axios.post(
       `${API_URL}/createItem`,
-      item,
+      formData,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       }
     );
@@ -37,11 +49,12 @@ const handleSubmit = async () => {
     alert('Item created successfully!');
     console.log('Created item:', response.data);
 
-    // Clear form fields after successful submission
+    // Clear form fields
     itemName.value = '';
     itemDescription.value = '';
     itemPrice.value = 0;
     itemCategory.value = '';
+    itemImage.value = null;
   } catch (error) {
     console.error('Error creating item:', error.response?.data || error.message);
     alert('Failed to create item. Please try again.');
@@ -74,6 +87,10 @@ const handleSubmit = async () => {
           <option value="home">Home</option>
           <option value="toys">Toys</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" @change="handleFileChange" accept="image/*" />
       </div>
       <button class="submit-btn" type="submit">Create Item</button>
     </form>
