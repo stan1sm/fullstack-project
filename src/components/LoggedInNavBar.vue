@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar">
-      <router-link to="/profile">My Profile</router-link>
-      <button @click="logout">Logout</button>
+      <router-link class="button" to="/profile">My Profile</router-link>
+      <button class="button" @click="logout">Logout</button>
     </nav>
   </template>
 
@@ -30,6 +30,16 @@ import axios from 'axios';
   </script>
 
   <style scoped>
+
+  .button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
   .navbar {
     display: flex;
     gap: 1rem;
