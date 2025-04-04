@@ -6,6 +6,20 @@
     <button @click="goToSettings" class="button">{{ $t('userProfile.settingsButton') }}</button>
     <button @click="createItem" class ="button">{{ $t('userProfile.createItemButton') }}</button>
   </div>
+  <h1>My Items</h1>
+    <div v-if="userItems.length === 0">
+      <p>You have not listed any items.</p>
+      <button @click="createItem" class="button">List Item</button>
+    </div>
+    <div v-else id="items-container" class="items-list">
+      <div v-for="item in userItems" :key="item.id" class="item">
+        <img :src="item.imageUrl" alt="Item Image" />
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description || 'No description available' }}</p>
+        <p>${{ item.price }}</p>
+      </div>
+    </div>
+
 </template>
 
 <script setup lang="ts">
@@ -18,6 +32,7 @@ const { t } = useI18n();
 const router = useRouter();
 const userEmail = ref('');
 const userName = ref('');
+const userItems = ref([]);
 
 const fetchUserEmail = async () => {
   try {
@@ -60,6 +75,57 @@ const fetchUserName = async () => {
   }
 };
 
+const fetchUserItems = async () => {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const response = await axios.get('http://localhost:8080/api/marketplace/user/items', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    userItems.value = response.data.map((item) => ({
+      ...item,
+      imageUrl: item.pictureUrl ? `http://localhost:8080/api/marketplace/images/${item.pictureUrl.split('/').pop()}` : 'default-image-url.jpg',
+    }));
+  } catch (error) {
+    console.error('Error fetching user items:', error);
+    alert('An error occurred while fetching your items.');
+  }
+};
+
+// Function to display user items
+const displayUserItems = (items) => {
+  const itemsContainer = document.getElementById('items-container');
+  itemsContainer.innerHTML = ''; // Clear existing items
+
+  items.forEach(item => {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'item';
+
+    const itemImage = document.createElement('img');
+    itemImage.src = item.imageUrl;
+    itemImage.alt = item.name;
+
+    const itemName = document.createElement('h3');
+    itemName.textContent = item.name;
+
+    const itemDescription = document.createElement('p');
+    itemDescription.textContent = item.description;
+
+    const itemPrice = document.createElement('p');
+    itemPrice.textContent = `$${item.price}`;
+
+    itemElement.appendChild(itemImage);
+    itemElement.appendChild(itemName);
+    itemElement.appendChild(itemDescription);
+    itemElement.appendChild(itemPrice);
+
+    itemsContainer.appendChild(itemElement);
+  });
+};
+
 const logout = async () => {
   try {
     const token = localStorage.getItem('authToken');
@@ -88,6 +154,7 @@ const createItem = () => {
 onMounted(() => {
   fetchUserEmail();
   fetchUserName();
+  fetchUserItems();
 });
 </script>
 

@@ -8,7 +8,15 @@ const itemName = ref('');
 const itemDescription = ref('');
 const itemPrice = ref(0.0);
 const itemCategory = ref('');
+const itemImage = ref<File | null>(null);
 const API_URL = 'http://localhost:8080/api/marketplace';
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    itemImage.value = target.files[0];
+  }
+};
 
 const handleSubmit = async () => {
   const token = localStorage.getItem('authToken');
@@ -19,19 +27,22 @@ const handleSubmit = async () => {
   }
 
   try {
-    const item = {
-      name: itemName.value,
-      description: itemDescription.value,
-      price: itemPrice.value,
-      category: itemCategory.value,
-    };
+    const formData = new FormData();
+    formData.append('name', itemName.value);
+    formData.append('description', itemDescription.value);
+    formData.append('price', itemPrice.value.toString());
+    formData.append('category', itemCategory.value);
+    if (itemImage.value) {
+      formData.append('image', itemImage.value);
+    }
 
-    const response = await axios.put(
+    const response = await axios.post(
       `${API_URL}/createItem`,
-      item,
+      formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       }
     );
@@ -76,6 +87,10 @@ const handleSubmit = async () => {
           <option value="home">{{ $t('createItemForm.categoryHome') }}</option>
           <option value="toys">{{ $t('createItemForm.categoryToys') }}</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" @change="handleFileChange" accept="image/*" />
       </div>
       <button class="submit-btn" type="submit">{{ $t('userProfile.createItemButton') }}</button>
     </form>
