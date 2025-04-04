@@ -2,8 +2,9 @@
   <div class="user-profile">
     <h1>Welcome, {{ userName }}</h1>
     <p>Email: {{ userEmail }}</p>
-    <button @click="logout" class="logout-btn">Logout</button>
-    <button @click="goToSettings" class="settings-btn">Settings</button>
+    <button @click="logout" class="button">Logout</button>
+    <button @click="goToSettings" class="button">Settings</button>
+    <button @click="createItem" class ="button">Create Item</button>
   </div>
 </template>
 
@@ -79,6 +80,10 @@ const goToSettings = () => {
   router.push('/userSettings'); // Navigate to the settings page
 };
 
+const createItem = () => {
+  router.push('/createItem'); // Navigate to the create item page
+};
+
 onMounted(() => {
   fetchUserEmail();
   fetchUserName();
@@ -91,8 +96,7 @@ onMounted(() => {
   margin-top: 2rem;
 }
 
-.logout-btn,
-.settings-btn {
+.button {
   background-color: var(--secondary-color);
   color: white;
   padding: 0.75rem 1.5rem;
