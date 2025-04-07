@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from '@vue/reactivity';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 

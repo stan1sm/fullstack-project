@@ -1,7 +1,21 @@
 <script setup lang="ts">
+import { ref } from '@vue/reactivity';
+import { onMounted } from '@vue/runtime-core';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const items = ref([]);
+
+const fetchItems = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/marketplace/items'); // Replace with your API endpoint
+    items.value = response.data; // Store the fetched items
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    alert('Failed to load items. Please try again later.');
+  }
+};
 
 const handleRedirect = () => {
   const token = localStorage.getItem('authToken'); // Check if the user is logged in
@@ -11,12 +25,26 @@ const handleRedirect = () => {
     router.push('/login'); // Redirect to Login page
   }
 };
+
+onMounted(() => {
+  fetchItems();
+});
 </script>
 
 <template>
   <div class="home">
-    <!-- Use $t for the button text -->
+    <!-- Redirect Button -->
     <button class="redirect-btn" @click="handleRedirect">{{ $t('userProfile.createItemButton') }}</button>
+
+    <!-- Items List -->
+    <div class="items-list">
+      <div v-for="item in items" :key="item.id" class="item-card">
+        <img :src="item.imageUrl || 'default-image-url.jpg'" alt="Item Image" class="item-image" />
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description || 'No description available' }}</p>
+        <p>${{ item.price }}</p>
+      </div>
+    </div>
   </div>
 </template>
 

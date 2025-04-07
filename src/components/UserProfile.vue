@@ -98,7 +98,9 @@ const fetchUserItems = async () => {
 // Function to display user items
 const displayUserItems = (items) => {
   const itemsContainer = document.getElementById('items-container');
-  itemsContainer.innerHTML = ''; // Clear existing items
+  if (itemsContainer) {
+    itemsContainer.innerHTML = ''; // Clear existing items
+  }
 
   items.forEach(item => {
     const itemElement = document.createElement('div');
