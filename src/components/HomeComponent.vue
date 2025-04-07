@@ -1,23 +1,39 @@
 <script setup lang="ts">
-import { ref } from '@vue/reactivity';
-import { onMounted } from '@vue/runtime-core';
+import { ref, Ref } from 'vue';
+import { onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const items = ref([]);
+// Define an interface for the item structure
+interface Item {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+}
 
-const fetchItems = async () => {
+const router = useRouter();
+const items: Ref<Item[]> = ref([]); // Reactive array of items with type
+
+// Fetch all available items from the database
+const fetchItems = async (): Promise<void> => {
   try {
-    const response = await axios.get('http://localhost:8080/api/marketplace/items'); // Replace with your API endpoint
+    const response = await axios.get<Item[]>('http://localhost:8080/api/marketplace/items'); // Replace with your API endpoint
     items.value = response.data; // Store the fetched items
+
+    // Log the fetched items and their image URLs
+    items.value.forEach((item) => {
+      console.log(`Fetched item: ${item.title}, Image URL: ${item.imageUrl || 'default-image-url.jpg'}`);
+    });
   } catch (error) {
     console.error('Error fetching items:', error);
     alert('Failed to load items. Please try again later.');
   }
 };
 
-const handleRedirect = () => {
+// Redirect logic
+const handleRedirect = (): void => {
   const token = localStorage.getItem('authToken'); // Check if the user is logged in
   if (token) {
     router.push('/createItem'); // Redirect to Create Item page
@@ -26,6 +42,7 @@ const handleRedirect = () => {
   }
 };
 
+// Fetch items when the component is mounted
 onMounted(() => {
   fetchItems();
 });
@@ -70,5 +87,39 @@ onMounted(() => {
 
 .redirect-btn:hover {
   background-color: #3aa876;
+}
+
+.items-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.item-card {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+}
+
+.item-card h3 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.item-card p {
+  margin: 0.5rem 0;
 }
 </style>
