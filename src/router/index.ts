@@ -48,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createItem',
     name: 'CreateItem',
     component: () => import('../views/CreateItemView.vue'),
+  },
+  {
+    path: '/admin',
+    name: 'AdminPanel',
+    component: () => import('@/components/AdminPanel.vue'),
   }
 
 ]
