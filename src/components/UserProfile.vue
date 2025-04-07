@@ -40,7 +40,7 @@ const fetchUserEmail = async () => {
     if (!token) {
       throw new Error(t('userProfile.errorNoToken'));
     }
-    const response = await axios.get('http://localhost:8080/api/marketplace/userinfo/email', {
+    const response = await axios.get('http://localhost:8080/api/userinfo/email', {
       headers: { Authorization: `Bearer ${token}` },
     });
     userEmail.value = response.data;
@@ -59,7 +59,7 @@ const fetchUserName = async () => {
   try {
     const token = localStorage.getItem('authToken');
     if (token) {
-      const response = await axios.get('http://localhost:8080/api/marketplace/userinfo/name', {
+      const response = await axios.get('http://localhost:8080/api/userinfo/name', {
         headers: { Authorization: `Bearer ${token}` },
       });
       userName.value = response.data;
@@ -81,13 +81,13 @@ const fetchUserItems = async () => {
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.get('http://localhost:8080/api/marketplace/user/items', {
+    const response = await axios.get('http://localhost:8080/api/user/items', {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     userItems.value = response.data.map((item) => ({
       ...item,
-      imageUrl: item.pictureUrl ? `http://localhost:8080/api/marketplace/images/${item.pictureUrl.split('/').pop()}` : 'default-image-url.jpg',
+      imageUrl: item.pictureUrl ? `http://localhost:8080/api/images/${item.pictureUrl.split('/').pop()}` : 'default-image-url.jpg',
     }));
   } catch (error) {
     console.error('Error fetching user items:', error);
@@ -132,7 +132,7 @@ const logout = async () => {
   try {
     const token = localStorage.getItem('authToken');
     if (token) {
-      await axios.post('http://localhost:8080/api/marketplace/logout', {}, {
+      await axios.post('http://localhost:8080/api/logout', {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
     }

@@ -53,7 +53,7 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-const API_URL = 'http://localhost:8080/api/marketplace';
+const API_URL = 'http://localhost:8080/api';
 
 const updateSettings = async () => {
   const token = localStorage.getItem('authToken');

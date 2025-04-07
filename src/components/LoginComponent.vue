@@ -37,7 +37,7 @@
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/marketplace/login', {
+      const response = await axios.post('http://localhost:8080/api/login', {
         email: email.value,
         password: password.value,
       });

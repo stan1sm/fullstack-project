@@ -9,7 +9,7 @@ const itemDescription = ref('');
 const itemPrice = ref(0.0);
 const itemCategory = ref('');
 const itemImage = ref<File | null>(null);
-const API_URL = 'http://localhost:8080/api/marketplace';
+const API_URL = 'http://localhost:8080/api';
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;

@@ -19,7 +19,7 @@ const items: Ref<Item[]> = ref([]);
 // Fetch all available items from the database
 const fetchItems = async (): Promise<void> => {
   try {
-    const response = await axios.get<Item[]>('http://localhost:8080/api/marketplace/items');
+    const response = await axios.get<Item[]>('http://localhost:8080/api/items');
     items.value = response.data;
 
     // Log the fetched items and their image URLs

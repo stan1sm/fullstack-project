@@ -17,7 +17,7 @@ import { useI18n } from 'vue-i18n';
   try {
     const token = localStorage.getItem('authToken');
     if (token) {
-      await axios.post('http://localhost:8080/api/marketplace/logout', {}, {
+      await axios.post('http://localhost:8080/api/logout', {}, {
         headers: { Authorization: `Bearer ${token}` }, // Add "Bearer" prefix
       });
     }

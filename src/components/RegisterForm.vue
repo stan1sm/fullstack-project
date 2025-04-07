@@ -41,7 +41,7 @@
       return
     }
     try {
-      const response = await axios.post('http://localhost:8080/api/marketplace/register', {
+      const response = await axios.post('http://localhost:8080/api/register', {
         username: name.value,
         email: email.value,
         password: password.value,
