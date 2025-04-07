@@ -1,5 +1,6 @@
 <template>
     <nav class="navbar">
+      <router-link to="/admin">Admin Panel</router-link>
       <router-link class="button" to="/profile">{{ $t('navbar.myProfile') }}</router-link>
       <button class="button" @click="logout">{{ $t('navbar.logout') }}</button>
     </nav>
