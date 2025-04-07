@@ -1,10 +1,14 @@
-import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import { createApp } from 'vue'
+// import { createI18n } from 'vue-i18n' // Removed direct import
+import i18n from './i18n' // Import the configured i18n instance
 
 import './assets/main.css'
+
+// Removed i18n messages and detection logic
 
 // Configure axios defaults
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
@@ -18,6 +22,9 @@ app.use(createPinia())
 
 // Use router
 app.use(router)
+
+// Use i18n plugin
+app.use(i18n) // Use the imported i18n instance
 
 // Mount app
 app.mount('#app') 

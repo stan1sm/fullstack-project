@@ -1,6 +1,6 @@
 <template>
   <div class="categories">
-    <h1>Categories</h1>
+    <h1>{{ $t('categoriesView.title') }}</h1>
     <div class="categories-grid">
       <div v-for="category in categories" :key="category.id" class="category-card">
         <h2>{{ category.name }}</h2>
@@ -11,6 +11,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 interface Category {
   id: number;
   name: string;
@@ -18,10 +22,10 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { id: 1, name: 'Electronics', description: 'Electronic devices and accessories' },
-  { id: 2, name: 'Clothing', description: 'Fashion items and accessories' },
-  { id: 3, name: 'Home & Garden', description: 'Items for home and garden' },
-  { id: 4, name: 'Sports', description: 'Sports equipment and accessories' }
+  { id: 1, name: t('categoriesView.categoryElectronicsName'), description: t('categoriesView.categoryElectronicsDesc') },
+  { id: 2, name: t('categoriesView.categoryClothingName'), description: t('categoriesView.categoryClothingDesc') },
+  { id: 3, name: t('categoriesView.categoryHomeGardenName'), description: t('categoriesView.categoryHomeGardenDesc') },
+  { id: 4, name: t('categoriesView.categorySportsName'), description: t('categoriesView.categorySportsDesc') }
 ];
 </script>
 

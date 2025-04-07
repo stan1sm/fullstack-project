@@ -1,9 +1,13 @@
 <template>
     <nav class="navbar">
-      <router-link class="button" to="/login">Login</router-link>
-      <router-link class="button" to="/register">Register</router-link>
+      <router-link class="button" to="/login">{{ $t('navbar.login') }}</router-link>
+      <router-link class="button" to="/register">{{ $t('navbar.register') }}</router-link>
     </nav>
   </template>
+
+  <script setup lang="ts">
+  // No script logic needed for translations here, but could import useI18n if required later
+  </script>
 
   <style scoped>
   .navbar {
