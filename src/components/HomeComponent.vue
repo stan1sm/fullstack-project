@@ -14,13 +14,13 @@ interface Item {
 }
 
 const router = useRouter();
-const items: Ref<Item[]> = ref([]); // Reactive array of items with type
+const items: Ref<Item[]> = ref([]);
 
 // Fetch all available items from the database
 const fetchItems = async (): Promise<void> => {
   try {
-    const response = await axios.get<Item[]>('http://localhost:8080/api/marketplace/items'); // Replace with your API endpoint
-    items.value = response.data; // Store the fetched items
+    const response = await axios.get<Item[]>('http://localhost:8080/api/marketplace/items');
+    items.value = response.data;
 
     // Log the fetched items and their image URLs
     items.value.forEach((item) => {
