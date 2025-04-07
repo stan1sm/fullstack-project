@@ -41,7 +41,7 @@
     const token = localStorage.getItem('authToken');
     if (token) {
       try {
-        const response = await axios.get('http://localhost:8080/api/isLoggedIn', {
+        const response = await axios.get('http://localhost:8080/api/auth/isLoggedIn', {
           headers: { Authorization: token },
         });
         if (response.data) {
